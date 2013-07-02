@@ -288,6 +288,7 @@ void cube(double x, double y, double z, double w, double angle=0, double yAxis=1
 	glPopMatrix();
 }
 
+
 /*
  * Membuat menara
  * x = koordinat x
@@ -311,12 +312,15 @@ void menara(double x, double y, double z, double w=0.9)
  * z = koordinat z
  * datar = bagian bawah datar
  */
-void kuncup(double x, double y, double z, double w = 0.9)
+void kuncup(double x, double y, double z, bool datar=false)
 {
     glPushMatrix();
         glTranslated(x,y,z);
         glRotated(90, -1.0, 0.0, 0.0);
-        gluCylinder(quad, w, 0.1, 2, 50, 50);
+        if(datar == false)
+            gluCylinder(quad, 0.9, 0.1, 2, 50, 50);
+        else
+            gluCylinder(quad, 2, 0.9, 1, 50, 50);
     glPopMatrix();
 }
 
@@ -329,25 +333,11 @@ void kuncup(double x, double y, double z, double w = 0.9)
 void gate()
 {
     glPushMatrix();
-        glTranslated(0,3,1);
+        glTranslated(0,-0.5,1);
         glRotated(90, -1.0, 0.0, 0.0);
         glutSolidCube(2);
     glPopMatrix();
 }
-
-void kampung()
-{
-    cube(3,0,12,0.5,30,1); // rumah 1
-    cube(2,0,13,0.5,60,1); // rumah 1
-    cube(2.6,0,12,0.5); // rumah 1
-    cube(3,0,12.4,0.5); // rumah 1
-    cube(3,0,13.8,0.5); // rumah 1
-
-}
-
-/*
- *
- */
 
 
 void renderScene(void){
@@ -358,74 +348,51 @@ void renderScene(void){
 	glLoadIdentity();
 	gluLookAt(viewx, viewy, viewz, 0.0, 0.0, 5.0, 0.0, 1.0, 0.0);
 
-/*------------
- * TERRAIN
- -------------*/
 // tanah rumput
 	glPushMatrix();
-        //glBindTexture(GL_TEXTURE_3D, texture[0]);
-        drawSceneTanah(_terrain, 0.3f, 0.9f, 0.0f);
+	//glBindTexture(GL_TEXTURE_3D, texture[0]);
+	drawSceneTanah(_terrain, 0.3f, 0.9f, 0.0f);
 	glPopMatrix();
 
 // tanah merah
 	glPushMatrix();
-        //glBindTexture(GL_TEXTURE_3D, texture[0]);
-        drawSceneTanah(_terrainTanah, 0.7f, 0.2f, 0.1f);
+	//glBindTexture(GL_TEXTURE_3D, texture[0]);
+	drawSceneTanah(_terrainTanah, 0.7f, 0.2f, 0.1f);
 	glPopMatrix();
 
 // air
 	glPushMatrix();
-        //glBindTexture(GL_TEXTURE_3D, texture[0]);
-        drawSceneTanah(_terrainAir, 0.0f, 0.2f, 0.5f);
+	//glBindTexture(GL_TEXTURE_3D, texture[0]);
+	drawSceneTanah(_terrainAir, 0.0f, 0.2f, 0.5f);
 	glPopMatrix();
-/*------------
- * END TERRAIN
- -------------*/
 
-/*------------
- * THE CASTLE
- -------------*/
+// bangunan utama
+    cube(0,0,0,4);
 
-    cube(0,0,0,4); // cube 1
-    cube(3.4,0,1,3,-30,1); // cube 2
-    cube(-3.4,0,1,3,30,1); // cube 3
-    cube(3,0,-2.3,2.5); // cube 4
-    cube(3,0,-5,3); // cube 5
-    cube(3,0,-7,2.5); // cube 6
-    cube(3.2,0,-10,3.4); // cube 7
-    cube(1.8,0,-10,2.5); // cube 8
-    cube(0,0,-10,2); // cube 9
-    cube(-1.8,0,-10,2.5); // cube 10
-    cube(-3.2,0,-10,3.4); // cube 11
-    cube(-3,0,-7,2.5); // cube 12
-    cube(-3,0,-5,3); // cube 13
-    cube(-3,0,-2.3,2.5); // cube 14
-    cube(0,1.5,1,2); // cube 15
-    cube(4,0,-12,3,30,1); // cube 16
-    cube(-4,0,-12,3,-30,1); // cube 17
+// lantai 1
+    cube(0,200,0,5);
 
-/* tower 2 */
+// balconi
+    for(int i=-1.5; i<2; i++)
+    {
+        cube(i,1,1.5,0.3);
+    }
+
+// gerbang
+	gate();
+
+// tower kanan
+    cube(-3.4,0,1,3,30,1);
     menara(2.4,-1.6,0);
     kuncup(2.4,2.1,0);
+    menara(4.4,-1.6,1.8,1.5);
+    kuncup(4.4,2.1,1.8,false);
 
-/* tower 1 */
+// tower kiri
+    cube(3.4,0,1,3,-30,1);
     menara(-2.4,-1.6,0);
     kuncup(-2.4,2.1,0);
-
-/* tower 3 */
-    menara(-3.8,-0.8,-10.5,1);
-    kuncup(-3.8,2.8,-10.5,1);
-
-/* tower 4 */
-    menara(3.8,-0.8,-10.5,1);
-    kuncup(3.8,2.8,-10.5,1);
-
-/*------------
- * END CASTLE
- -------------*/
-
- kampung();
-
+    menara(-4.4,-1.6,1.8,1.5);
 
 	glutSwapBuffers();
 	glFlush();
@@ -526,9 +493,9 @@ void init(void){
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 	glEnable(GL_CULL_FACE);
 
-    _terrain = loadTerrain("heightmap.bmp", 13);
-    _terrainTanah = loadTerrain("heightmapTanah.bmp", 13);
-    _terrainAir = loadTerrain("heightmapAir.bmp", 13);
+    _terrain = loadTerrain("heightmap.bmp", 20);
+    _terrainTanah = loadTerrain("heightmapTanah.bmp", 20);
+    _terrainAir = loadTerrain("heightmapAir.bmp", 20);
 }
 
 int main (int argc, char **argv){

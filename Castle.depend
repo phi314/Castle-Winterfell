@@ -1,9 +1,34 @@
 # depslib dependency file v1.0
-1371727542 source:d:\unleashed\my documents\workspace\opengl\castle\main.cpp
-	<windows.h>
+1338889972 source:d:\unleashed\my documents\workspace\opengl\castlevania\imageloader.cpp
+	<assert.h>
+	<fstream>
+	"imageloader.h"
+
+1341010370 c:\program files\codeblocks\mingw\include\assert.h
+	<_mingw.h>
+
+1341010370 c:\program files\codeblocks\mingw\include\_mingw.h
+
+1338889972 d:\unleashed\my documents\workspace\opengl\castlevania\imageloader.h
+
+1372750345 source:d:\unleashed\my documents\workspace\opengl\castlevania\main.cpp
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<math.h>
+	<OpenGL/OpenGL.h>
 	<GLUT/glut.h>
 	<GL/glut.h>
-	<stdlib.h>
+	<GL/glu.h>
+	<GL/gl.h>
+	"imageloader.h"
+	"vec3f.h"
+
+1301111164 c:\program files\codeblocks\mingw\include\gl\gl.h
+
+1301111164 c:\program files\codeblocks\mingw\include\gl\glu.h
+	<stddef.h>
+	<GL/gl.h>
 
 983676786 c:\program files\codeblocks\mingw\include\gl\glut.h
 	<windows.h>
@@ -63,8 +88,6 @@
 1341010376 c:\program files\codeblocks\mingw\include\string.h
 	<_mingw.h>
 	<stddef.h>
-
-1341010370 c:\program files\codeblocks\mingw\include\_mingw.h
 
 1301111148 c:\program files\codeblocks\mingw\include\basetsd.h
 
@@ -215,31 +238,6 @@
 1301111156 c:\program files\codeblocks\mingw\include\oleidl.h
 	<objfwd.h>
 
-1301111164 c:\program files\codeblocks\mingw\include\gl\gl.h
-
-1301111164 c:\program files\codeblocks\mingw\include\gl\glu.h
-	<stddef.h>
-	<GL/gl.h>
-
-1371754363 source:d:\phi314\documents\codeblock\castle\main.cpp
-	<gl/gl.h>
-	<gl/glu.h>
-	<gl/glut.h>
-	<math.h>
-	<stdio.h>
-	<stdlib.h>
-
-1208700260 source:d:\phi314\documents\codeblock\er\glm.cpp
-	<math.h>
-	<stdio.h>
-	<stdlib.h>
-	<string.h>
-	<assert.h>
-	"glm.h"
-
-1341010374 c:\program files\codeblocks\mingw\include\math.h
-	<_mingw.h>
-
 1341010376 c:\program files\codeblocks\mingw\include\stdio.h
 	<_mingw.h>
 	<stddef.h>
@@ -250,20 +248,13 @@
 	<_mingw.h>
 	<stddef.h>
 
-1341010370 c:\program files\codeblocks\mingw\include\assert.h
+1341010374 c:\program files\codeblocks\mingw\include\math.h
 	<_mingw.h>
 
-1371743878 d:\phi314\documents\codeblock\er\glm.h
-	<GL/glut.h>
+1338889972 d:\unleashed\my documents\workspace\opengl\castlevania\vec3f.h
+	<iostream>
 
-1371743878 d:\phi314\documents\codeblock\castle\glm.h
-	<GL/glut.h>
-
-1208700260 source:d:\phi314\documents\codeblock\castle\glm.cpp
+1338889972 source:d:\unleashed\my documents\workspace\opengl\castlevania\vec3f.cpp
 	<math.h>
-	<stdio.h>
-	<stdlib.h>
-	<string.h>
-	<assert.h>
-	"glm.h"
+	"vec3f.h"
 

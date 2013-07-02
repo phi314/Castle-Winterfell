@@ -42,7 +42,14 @@
 			<Add library="gdi32" />
 			<Add directory="C:/Program Files/CodeBlocks/MinGW/lib" />
 		</Linker>
+		<Unit filename="heightmap.bmp" />
+		<Unit filename="heightmapAir.bmp" />
+		<Unit filename="heightmapTanah.bmp" />
+		<Unit filename="imageloader.cpp" />
+		<Unit filename="imageloader.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="vec3f.cpp" />
+		<Unit filename="vec3f.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />
