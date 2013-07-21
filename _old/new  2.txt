@@ -1,0 +1,47 @@
+/*------------
+ * THE CASTLE
+ -------------*/
+
+glScaled(1.5,1.5,1.5);
+
+//front-side
+    wall(0,0,0,5,5,-5); //width tower 1
+    wall(5,-4,-1,10,4,-2);// gerbang
+    wall(6,-4,-1,9,2,-.5,1);// pintu
+    wall(10,0,0,15,5,-5); //width tower 2
+    wall(15,-4,-1,25,3,-2);// the wall 1
+    wall(0,-4,-1,-10,3,-2);// the wall 2
+
+//right-side
+    wall(25,-4,-1,26,3,-20);// the wall 3
+
+//left-side
+    wall(-10,-4,-1,-11,3,-20);// the wall 4
+    wall(-13,0,-10,-8,5,-5); //width tower 3
+
+//main-castle
+    wall(0,0,-10,5,5,-15); //main1
+    wall(0,0,-15,10,5,-20); //main2
+    wall(-5,0,-15,3,5,-25); //main3
+    wall(0,0,-20,13,5,-40); //main1
+
+    wall(-5,2,-15,-4,8,-14.6,1); //papan1
+    wall(-3,2,-15,-2,8,-14.6,1); //papan1
+    wall(-1,2,-15,-0,8,-14.6,1); //papan1
+
+
+//main-castle-floor1
+    wall(-5,0,-15,3,10,-25); //main3
+
+/*------------
+ * END CASTLE
+ -------------*/
+glScaled(1,1,1);
+
+
+square();
+
+	glColor3f(0,0,0);
+ kampung();
+
+ prajurit();

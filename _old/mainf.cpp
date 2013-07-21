@@ -9,11 +9,14 @@
 #include <GL/glut.h>
 #include <GL/glu.h>
 #include <GL/gl.h>
+#include <GL/glaux.h>
 #include "imageloader.h"
 #include "vec3f.h"
 #endif
 
 using namespace std;
+
+GLint   base,loop;
 
 int w=900, h=850, z=-12;
 int arg=0, n=3;
@@ -244,7 +247,8 @@ Terrain* loadTerrain(const char* filename, float height) {
 /*
  * Load gambar BMP
  */
-int ImageLoad(char *filename, ImageTexture *imageTex) {
+//mengambil gambar BMP
+int ImageLoad(char *filename, ImageTexture *ImageTexture) {
 	FILE *file;
 	unsigned long size; // ukuran image dalam bytes
 	unsigned long i; // standard counter.
@@ -261,20 +265,20 @@ int ImageLoad(char *filename, ImageTexture *imageTex) {
 	// mencari file header bmp
 	fseek(file, 18, SEEK_CUR);
 	// read the width
-	if ((i = fread(&imageTex->sizeX, 4, 1, file)) != 1) {
+	if ((i = fread(&ImageTexture->sizeX, 4, 1, file)) != 1) {
 		printf("Error reading width from %s.\n", filename);
 		return 0;
 	}
 	//printf("Width of %s: %lu\n", filename, image->sizeX);
 	// membaca nilai height
-	if ((i = fread(&imageTex->sizeY, 4, 1, file)) != 1) {
+	if ((i = fread(&ImageTexture->sizeY, 4, 1, file)) != 1) {
 		printf("Error reading height from %s.\n", filename);
 		return 0;
 	}
 	//printf("Height of %s: %lu\n", filename, image->sizeY);
 	//menghitung ukuran image(asumsi 24 bits or 3 bytes per pixel).
 
-	size = imageTex->sizeX * imageTex->sizeY * 3;
+	size = ImageTexture->sizeX * ImageTexture->sizeY * 3;
 	// read the planes
 	if ((fread(&plane, 2, 1, file)) != 1) {
 		printf("Error reading planes from %s.\n", filename);
@@ -297,74 +301,40 @@ int ImageLoad(char *filename, ImageTexture *imageTex) {
 	// seek past the rest of the bitmap header.
 	fseek(file, 24, SEEK_CUR);
 	// read the data.
-	imageTex->data = (char *) malloc(size);
-	if (imageTex->data == NULL) {
+	ImageTexture->data = (char *) malloc(size);
+	if (ImageTexture->data == NULL) {
 		printf("Error allocating memory for color-corrected image data");
 		return 0;
 	}
-	if ((i = fread(imageTex->data, size, 1, file)) != 1) {
+	if ((i = fread(ImageTexture->data, size, 1, file)) != 1) {
 		printf("Error reading image data from %s.\n", filename);
 		return 0;
 	}
 	for (i = 0; i < size; i += 3) { // membalikan semuan nilai warna (gbr - > rgb)
-		temp = imageTex->data[i];
-		imageTex->data[i] = imageTex->data[i + 2];
-		imageTex->data[i + 2] = temp;
+		temp = ImageTexture->data[i];
+		ImageTexture->data[i] = ImageTexture->data[i + 2];
+		ImageTexture->data[i + 2] = temp;
 	}
 	// we're done.
 	return 1;
 }
 
 /*
- * Ambil Texture
+ *
  */
 ImageTexture * loadTexture() {
 	ImageTexture *image1;
 	// alokasi memmory untuk tekstur
-	image1 = (ImageTexture *) malloc(sizeof(ImageTexture));
+	image1 = (ImageTexture *) malloc(sizeof(Image));
 	if (image1 == NULL) {
 		printf("Error allocating space for image");
 		exit(0);
 	}
 	//pic.bmp is a 64x64 picture
-	if (!ImageLoad("water.bmp", image1)) {
+	if (!ImageLoad("dinding_2.bmp", image1)) {
 		exit(1);
 	}
 	return image1;
-}
-
-/*
- * Load Texture
- */
-GLuint loadtextures(const char *filename, int width, int height) {
-	GLuint texture;
-
-	unsigned char *data;
-	FILE *file;
-
-	file = fopen(filename, "rb");
-	if (file == NULL)
-		return 0;
-
-	data = (unsigned char *) malloc(width * height * 3);
-	fread(data, width * height * 3, 1, file);
-
-	fclose(file);
-
-	glGenTextures(1, &texture);
-	glBindTexture(GL_TEXTURE_2D, texture);
-	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
-			GL_LINEAR_MIPMAP_NEAREST);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameterf(  GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
-	glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
-	gluBuild2DMipmaps(GL_TEXTURE_2D, 3, width, height, GL_RGB,
-			GL_UNSIGNED_BYTE, data);
-
-	data = NULL;
-
-	return texture;
 }
 
 void freetexture(GLuint texture) {
@@ -481,7 +451,7 @@ void gate()
 
 void benteng()
 {
-    glBindTexture(GL_TEXTURE_2D,texture[0]);
+
     glBegin(GL_QUADS); // Start drawing a quad primitive
 
 glVertex3f(-8.0f, -1.0f, 0.0f); // The bottom left corner
@@ -554,6 +524,7 @@ void renderScene(void){
  -------------*/
 //lantai 1
 
+    glBindTexture(GL_TEXTURE_2D,texture[0]);
 glScaled(3, 3, 3);
     cube(0,0,0,4); // cube 1
     cube(3.4,0,1,3,-30,1); // cube 2
@@ -595,10 +566,6 @@ glScaled(3, 3, 3);
     cube(-2.5,5.5,-9,2); //4
     //menara(-2.5,4.5,-9.5);
     //kuncup(-2.5,8.5,-9.5);
-
-
-
-
 
     menara(0,1.5,-3);
     kuncup(0,5.5,-3);
@@ -710,7 +677,6 @@ void reshape(int w1, int h1){
 	 glLoadIdentity();
 	 gluPerspective(45.0,(float) w1/(float) h1, 1.0,300.0);
 	 glMatrixMode(GL_MODELVIEW);
-	 glLoadIdentity();
 }
 
 void timer(int value){
@@ -731,11 +697,29 @@ void init(void){
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 	glEnable(GL_TEXTURE_2D);
 
+		glEnable(GL_TEXTURE_GEN_S); //enable texture coordinate generation
+    glEnable(GL_TEXTURE_GEN_T);
+
+
     _terrain = loadTerrain("heightmap.bmp", 13);
     _terrainTanah = loadTerrain("heightmapTanah.bmp", 13);
     _terrainAir = loadTerrain("heightmapAir.bmp", 13);
 
-    texture[0] = loadtextures("water.bmp",256,256);
+    ImageTexture *image1 = loadTexture();
+
+    // Generate texture/ membuat texture
+	glGenTextures(5,texture);
+
+	//binding texture untuk membuat texture 2D
+	glBindTexture(GL_TEXTURE_2D, texture[0]);
+	//menyesuaikan ukuran textur ketika image lebih besar dari texture
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	//menyesuaikan ukuran textur ketika image lebih kecil dari texture
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, 3, image1->sizeX, image1->sizeY, 0, GL_RGB,
+			GL_UNSIGNED_BYTE, image1->data);
+
+
 }
 
 int main (int argc, char **argv){
@@ -748,6 +732,7 @@ int main (int argc, char **argv){
 
 	 glutDisplayFunc(renderScene);
 	 glutReshapeFunc(reshape);
+	 glutIdleFunc(renderScene);
 	 glutKeyboardFunc(keyboard);
 	 glutSpecialFunc(kibor);
 	 glutMouseFunc(kursor);
@@ -763,4 +748,5 @@ int main (int argc, char **argv){
 
 
 	 glutMainLoop();
+	 return 0;
 }

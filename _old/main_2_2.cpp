@@ -21,7 +21,7 @@ float mult = 1, v = 1.0;
 float sx=1, sy=1, sz=1;
 float rx=20.0f, ry =50.0f;
 
-static GLfloat spin, spin2 = 0.0;
+static GLfloat spin = 0.0;
 float angle = 0;
 
 static int viewx = 0;
@@ -38,7 +38,7 @@ GLUquadricObj *quad = gluNewQuadric();
 
 //texture
 
-GLuint texture[40];
+
 
 typedef struct ImageTexture ImageTexture; //struktur data untuk
 
@@ -47,6 +47,7 @@ struct ImageTexture {
 	unsigned long sizeY;
 	char *data;
 };
+
 
 const GLfloat light_ambient[] = { 0.3f, 0.3f, 0.3f, 1.0f };
 const GLfloat light_diffuse[] = { 0.7f, 0.7f, 0.7f, 1.0f };
@@ -315,24 +316,8 @@ int ImageLoad(char *filename, ImageTexture *imageTex) {
 	return 1;
 }
 
-/*
- * Ambil Texture
- */
-ImageTexture * loadTexture() {
-	ImageTexture *image1;
-	// alokasi memmory untuk tekstur
-	image1 = (ImageTexture *) malloc(sizeof(ImageTexture));
-	if (image1 == NULL) {
-		printf("Error allocating space for image");
-		exit(0);
-	}
-	//pic.bmp is a 64x64 picture
-	if (!ImageLoad("water.bmp", image1)) {
-		exit(1);
-	}
-	return image1;
-}
 
+GLuint texture[10];
 /*
  * Load Texture
  */
@@ -479,19 +464,72 @@ void gate()
     glPopMatrix();
 }
 
-void benteng()
+void wall(float x1,float y1,float z1,float x2,float y2,float z2, int t=0)
 {
-    glBindTexture(GL_TEXTURE_2D,texture[0]);
-    glBegin(GL_QUADS); // Start drawing a quad primitive
+    glPushMatrix();
+        glBindTexture(GL_TEXTURE_2D,texture[t]);
+            glBegin(GL_QUADS); // Start drawing a quad primitive
+	//depan
+	glTexCoord2f(0.0, 0.0);
+	glVertex3f(x1,y1,z1);
+	glTexCoord2f(0.0, 1.0);
+	glVertex3f(x2,y1,z1);
+	glTexCoord2f(1.0, 1.0);
+	glVertex3f(x2,y2,z1);
+	glTexCoord2f(1.0, 0.0);
+	glVertex3f(x1,y2,z1);
+	//atas
+	glTexCoord2f(0.0, 0.0);
+	glVertex3f(x1,y2,z1);
+	glTexCoord2f(0.0, 1.0);
+	glVertex3f(x2,y2,z1);
+	glTexCoord2f(1.0, 1.0);
+	glVertex3f(x2,y2,z2);
+	glTexCoord2f(1.0, 0.0);
+	glVertex3f(x1,y2,z2);
+	//belakang
+	glTexCoord2f(0.0, 0.0);
+	glVertex3f(x1,y2,z2);
+	glTexCoord2f(0.0, 1.0);
+	glVertex3f(x2,y2,z2);
+	glTexCoord2f(1.0, 1.0);
+	glVertex3f(x2,y1,z2);
+	glTexCoord2f(1.0, 0.0);
+	glVertex3f(x1,y1,z2);
+	//bawah
+	glTexCoord2f(0.0, 0.0);
+	glVertex3f(x1,y1,z2);
+	glTexCoord2f(1.0, 0.0);
+	glVertex3f(x2,y1,z2);
+	glTexCoord2f(1.0, 1.0);
+	glVertex3f(x2,y1,z1);
+	glTexCoord2f(0.0, 1.0);
+	glVertex3f(x1,y1,z1);
+	//samping kiri
+	glTexCoord2f(0.0, 0.0);
+	glVertex3f(x1,y1,z1);
+	glTexCoord2f(1.0, 0.0);
+	glVertex3f(x1,y2,z1);
+	glTexCoord2f(1.0, 1.0);
+	glVertex3f(x1,y2,z2);
+	glTexCoord2f(0.0, 1.0);
+	glVertex3f(x1,y1,z2);
+	//samping kanan
+	glTexCoord2f(0.0, 0.0);
+	glVertex3f(x2,y1,z1);
+	glTexCoord2f(1.0, 0.0);
+	glVertex3f(x2,y2,z1);
+	glTexCoord2f(1.0, 1.0);
+	glVertex3f(x2,y2,z2);
+	glTexCoord2f(0.0, 1.0);
+	glVertex3f(x2,y1,z2);
 
-glVertex3f(-8.0f, -1.0f, 0.0f); // The bottom left corner
-glVertex3f(-8.0f, 1.0f, 0.0f); // The top left corner
-glVertex3f(8.0f, 1.0f, 0.0f); // The top right corner
-glVertex3f(8.0f, -1.0f, 0.0f); // The bottom right corner
 
-glEnd();
-glBindTexture(GL_TEXTURE_2D,texture[1]);
+
+            glEnd();
+    glPopMatrix();
 }
+
 
 void kampung()
 {
@@ -545,87 +583,36 @@ void renderScene(void){
         //glBindTexture(GL_TEXTURE_3D, texture[0]);
         drawSceneTanah(_terrainAir, 0.0f, 0.2f, 0.5f);
 	glPopMatrix();
+
+	glColor3f(1,1,1);
 /*------------
  * END TERRAIN
  -------------*/
 
+
+
 /*------------
  * THE CASTLE
  -------------*/
-//lantai 1
 
-glScaled(3, 3, 3);
-    cube(0,0,0,4); // cube 1
-    cube(3.4,0,1,3,-30,1); // cube 2
-    cube(-3.4,0,1,3,30,1); // cube 3
-    cube(3,0,-2.3,2.5); // cube 4
-    cube(3,0,-5,3); // cube 5
-    cube(3,0,-7,2.5); // cube 6
-    cube(3.2,0,-10,3.4); // cube 7
-    cube(1.8,0,-10,2.5); // cube 8
-    cube(0,0,-10,2); // cube 9
-    cube(-1.8,0,-10,2.5); // cube 10
-    cube(-3.2,0,-10,3.4); // cube 11
-    cube(-3,0,-7,2.5); // cube 12
-    cube(-3,0,-5,3); // cube 13
-    cube(-3,0,-2.3,2.5); // cube 14
-    cube(0,1.5,1,2); // cube 15
-    cube(4,0,-12,3,30,1); // cube 16
-    cube(-4,0,-12,3,-30,1); // cube 17
+glScaled(1.5,1.5,1.5);
+//front-side
+    wall(0,0,0,5,5,-5); //width tower 1
+    wall(5,-4,-1,10,4,-2);// gerbang
+
+    wall(5,-4,0,10,4,-2,0.2);// pintu
+
+    wall(10,0,0,15,5,-5); //width tower 2
+    wall(15,-4,-1,20,3,-2);// the wall 1
+    wall(0,-4,-1,-5,3,-2);// the wall 2
 
 
-//lantai 2
-    cube(0,3,-7,5);
-    cube(0,3,-3,3);
-
-//lantai 3
-
-    cube(-2.5,5.5,-4.5,2);//1
-    //menara(-2.5,4.5,-4.5);
-    //kuncup(-2.5,8.5,-4.5);
-
-    cube(2.5,5.5,-4.5,2); //2
-    //menara(2.5,4.5,-4.5);
-    //kuncup(2.5,8.5,-4.5);
-
-    cube(2.5,5.5,-9,2); //3
-    //menara(2.5,4.5,-9.5);
-    //kuncup(2.5,8.5,-9.5);
-
-    cube(-2.5,5.5,-9,2); //4
-    //menara(-2.5,4.5,-9.5);
-    //kuncup(-2.5,8.5,-9.5);
-
-
-
-
-
-    menara(0,1.5,-3);
-    kuncup(0,5.5,-3);
-
-/* tower 2 */
-    menara(2.4,-1.6,0);
-    kuncup(2.4,2.1,0);
-
-/* tower 1 */
-    menara(-2.4,-1.6,0);
-    kuncup(-2.4,2.1,0);
-
-/* tower 3 */
-    menara(-3.8,-0.8,-10.5,1);
-    kuncup(-3.8,2.8,-10.5,1);
-
-/* tower 4 */
-    menara(3.8,-0.8,-10.5,1);
-    kuncup(3.8,2.8,-10.5,1);
-
-   benteng();
 
 
 /*------------
  * END CASTLE
  -------------*/
-
+glScaled(1,1,1);
  kampung();
 
  prajurit();
@@ -731,11 +718,16 @@ void init(void){
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 	glEnable(GL_TEXTURE_2D);
 
+
+
     _terrain = loadTerrain("heightmap.bmp", 13);
     _terrainTanah = loadTerrain("heightmapTanah.bmp", 13);
     _terrainAir = loadTerrain("heightmapAir.bmp", 13);
 
     texture[0] = loadtextures("water.bmp",256,256);
+    texture[1] = loadtextures("water.bmp",256,256);
+
+
 }
 
 int main (int argc, char **argv){

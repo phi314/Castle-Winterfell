@@ -28,40 +28,9 @@ static int viewx = 0;
 static int viewy = 20;
 static int viewz = 40;
 
-/* animation */
-int x_tower = 1;
-int min_x_tower = 0, max_x_tower=10;
-
 float j=0;
 
 GLUquadricObj *quad = gluNewQuadric();
-
-//texture
-
-GLuint texture[40];
-
-typedef struct ImageTexture ImageTexture; //struktur data untuk
-
-struct ImageTexture {
-	unsigned long sizeX;
-	unsigned long sizeY;
-	char *data;
-};
-
-const GLfloat light_ambient[] = { 0.3f, 0.3f, 0.3f, 1.0f };
-const GLfloat light_diffuse[] = { 0.7f, 0.7f, 0.7f, 1.0f };
-const GLfloat light_specular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-const GLfloat light_position[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-
-const GLfloat light_ambient2[] = { 0.3f, 0.3f, 0.3f, 0.0f };
-const GLfloat light_diffuse2[] = { 0.3f, 0.3f, 0.3f, 0.0f };
-
-const GLfloat mat_ambient[] = { 0.8f, 0.8f, 0.8f, 1.0f };
-const GLfloat mat_diffuse[] = { 0.8f, 0.8f, 0.8f, 1.0f };
-const GLfloat mat_specular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-const GLfloat high_shininess[] = { 100.0f };
-
-unsigned int LoadTextureFromBmpFile(char *filename);
 
 
 /*
@@ -241,136 +210,6 @@ Terrain* loadTerrain(const char* filename, float height) {
 	return t;
 }
 
-/*
- * Load gambar BMP
- */
-int ImageLoad(char *filename, ImageTexture *imageTex) {
-	FILE *file;
-	unsigned long size; // ukuran image dalam bytes
-	unsigned long i; // standard counter.
-	unsigned short int plane; // number of planes in image
-
-	unsigned short int bpp; // jumlah bits per pixel
-	char temp; // temporary color storage for var warna sementara untuk memastikan filenya ada
-
-
-	if ((file = fopen(filename, "rb")) == NULL) {
-		printf("File Not Found : %s\n", filename);
-		return 0;
-	}
-	// mencari file header bmp
-	fseek(file, 18, SEEK_CUR);
-	// read the width
-	if ((i = fread(&imageTex->sizeX, 4, 1, file)) != 1) {
-		printf("Error reading width from %s.\n", filename);
-		return 0;
-	}
-	//printf("Width of %s: %lu\n", filename, image->sizeX);
-	// membaca nilai height
-	if ((i = fread(&imageTex->sizeY, 4, 1, file)) != 1) {
-		printf("Error reading height from %s.\n", filename);
-		return 0;
-	}
-	//printf("Height of %s: %lu\n", filename, image->sizeY);
-	//menghitung ukuran image(asumsi 24 bits or 3 bytes per pixel).
-
-	size = imageTex->sizeX * imageTex->sizeY * 3;
-	// read the planes
-	if ((fread(&plane, 2, 1, file)) != 1) {
-		printf("Error reading planes from %s.\n", filename);
-		return 0;
-	}
-	if (plane != 1) {
-		printf("Planes from %s is not 1: %u\n", filename, plane);
-		return 0;
-	}
-	// read the bitsperpixel
-	if ((i = fread(&bpp, 2, 1, file)) != 1) {
-		printf("Error reading bpp from %s.\n", filename);
-
-		return 0;
-	}
-	if (bpp != 24) {
-		printf("Bpp from %s is not 24: %u\n", filename, bpp);
-		return 0;
-	}
-	// seek past the rest of the bitmap header.
-	fseek(file, 24, SEEK_CUR);
-	// read the data.
-	imageTex->data = (char *) malloc(size);
-	if (imageTex->data == NULL) {
-		printf("Error allocating memory for color-corrected image data");
-		return 0;
-	}
-	if ((i = fread(imageTex->data, size, 1, file)) != 1) {
-		printf("Error reading image data from %s.\n", filename);
-		return 0;
-	}
-	for (i = 0; i < size; i += 3) { // membalikan semuan nilai warna (gbr - > rgb)
-		temp = imageTex->data[i];
-		imageTex->data[i] = imageTex->data[i + 2];
-		imageTex->data[i + 2] = temp;
-	}
-	// we're done.
-	return 1;
-}
-
-/*
- * Ambil Texture
- */
-ImageTexture * loadTexture() {
-	ImageTexture *image1;
-	// alokasi memmory untuk tekstur
-	image1 = (ImageTexture *) malloc(sizeof(ImageTexture));
-	if (image1 == NULL) {
-		printf("Error allocating space for image");
-		exit(0);
-	}
-	//pic.bmp is a 64x64 picture
-	if (!ImageLoad("water.bmp", image1)) {
-		exit(1);
-	}
-	return image1;
-}
-
-/*
- * Load Texture
- */
-GLuint loadtextures(const char *filename, int width, int height) {
-	GLuint texture;
-
-	unsigned char *data;
-	FILE *file;
-
-	file = fopen(filename, "rb");
-	if (file == NULL)
-		return 0;
-
-	data = (unsigned char *) malloc(width * height * 3);
-	fread(data, width * height * 3, 1, file);
-
-	fclose(file);
-
-	glGenTextures(1, &texture);
-	glBindTexture(GL_TEXTURE_2D, texture);
-	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
-			GL_LINEAR_MIPMAP_NEAREST);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameterf(  GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
-	glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
-	gluBuild2DMipmaps(GL_TEXTURE_2D, 3, width, height, GL_RGB,
-			GL_UNSIGNED_BYTE, data);
-
-	data = NULL;
-
-	return texture;
-}
-
-void freetexture(GLuint texture) {
-	glDeleteTextures(1, &texture);
-}
-
 // Type Data Terrain
 Terrain* _terrain;
 Terrain* _terrainTanah;
@@ -379,7 +218,21 @@ Terrain* _terrainAir;
 // Untuk Display
 void drawSceneTanah(Terrain *terrain, GLfloat r, GLfloat g, GLfloat b) {
 	//	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	/*
+	 glMatrixMode(GL_MODELVIEW);
+	 glLoadIdentity();
+	 glTranslatef(0.0f, 0.0f, -10.0f);
+	 glRotatef(30.0f, 1.0f, 0.0f, 0.0f);
+	 glRotatef(-_angle, 0.0f, 1.0f, 0.0f);
 
+	 GLfloat ambientColor[] = {0.4f, 0.4f, 0.4f, 1.0f};
+	 glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambientColor);
+
+	 GLfloat lightColor0[] = {0.6f, 0.6f, 0.6f, 1.0f};
+	 GLfloat lightPos0[] = {-0.5f, 0.8f, 0.1f, 0.0f};
+	 glLightfv(GL_LIGHT0, GL_DIFFUSE, lightColor0);
+	 glLightfv(GL_LIGHT0, GL_POSITION, lightPos0);
+	 */
 	float scale = 500.0f / max(terrain->width() - 1, terrain->length() - 1);
 	glScalef(scale, scale, scale);
 	glTranslatef(-(float) (terrain->width() - 1) / 2, 0.0f,
@@ -402,6 +255,9 @@ void drawSceneTanah(Terrain *terrain, GLfloat r, GLfloat g, GLfloat b) {
 
 }
 
+unsigned int LoadTextureFromBmpFile(char *filename);
+
+
 void initRendering() {
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_COLOR_MATERIAL);
@@ -423,8 +279,8 @@ void initRendering() {
 void cube(double x, double y, double z, double w, double angle=0, double yAxis=1)
 {
 	glPushMatrix();
-
         glTranslatef(x,y,z);
+        glEnable(GL_COLOR_MATERIAL);
         glColor3f(1,1,1);
         glRotatef(angle,0,yAxis,0);
         glutSolidCube(w);
@@ -479,20 +335,6 @@ void gate()
     glPopMatrix();
 }
 
-void benteng()
-{
-    glBindTexture(GL_TEXTURE_2D,texture[0]);
-    glBegin(GL_QUADS); // Start drawing a quad primitive
-
-glVertex3f(-8.0f, -1.0f, 0.0f); // The bottom left corner
-glVertex3f(-8.0f, 1.0f, 0.0f); // The top left corner
-glVertex3f(8.0f, 1.0f, 0.0f); // The top right corner
-glVertex3f(8.0f, -1.0f, 0.0f); // The bottom right corner
-
-glEnd();
-glBindTexture(GL_TEXTURE_2D,texture[1]);
-}
-
 void kampung()
 {
     cube(3,0,12,0.5,30,1); // rumah 1
@@ -505,11 +347,7 @@ void kampung()
     cube(-2.6,0,12,0.5); // rumah 1
     cube(-3,0,12.4,0.5); // rumah 1
     cube(-3,0,13.8,0.5); // rumah 1
-}
 
-void prajurit()
-{
-    cube(8,0,12,0.1);
 }
 
 /*
@@ -530,7 +368,7 @@ void renderScene(void){
  -------------*/
 // tanah rumput
 	glPushMatrix();
-        //glBindTexture(GL_TEXTURE_3D, texture[1]);
+        //glBindTexture(GL_TEXTURE_3D, texture[0]);
         drawSceneTanah(_terrain, 0.3f, 0.9f, 0.0f);
 	glPopMatrix();
 
@@ -552,9 +390,7 @@ void renderScene(void){
 /*------------
  * THE CASTLE
  -------------*/
-//lantai 1
 
-glScaled(3, 3, 3);
     cube(0,0,0,4); // cube 1
     cube(3.4,0,1,3,-30,1); // cube 2
     cube(-3.4,0,1,3,30,1); // cube 3
@@ -573,36 +409,6 @@ glScaled(3, 3, 3);
     cube(4,0,-12,3,30,1); // cube 16
     cube(-4,0,-12,3,-30,1); // cube 17
 
-
-//lantai 2
-    cube(0,3,-7,5);
-    cube(0,3,-3,3);
-
-//lantai 3
-
-    cube(-2.5,5.5,-4.5,2);//1
-    //menara(-2.5,4.5,-4.5);
-    //kuncup(-2.5,8.5,-4.5);
-
-    cube(2.5,5.5,-4.5,2); //2
-    //menara(2.5,4.5,-4.5);
-    //kuncup(2.5,8.5,-4.5);
-
-    cube(2.5,5.5,-9,2); //3
-    //menara(2.5,4.5,-9.5);
-    //kuncup(2.5,8.5,-9.5);
-
-    cube(-2.5,5.5,-9,2); //4
-    //menara(-2.5,4.5,-9.5);
-    //kuncup(-2.5,8.5,-9.5);
-
-
-
-
-
-    menara(0,1.5,-3);
-    kuncup(0,5.5,-3);
-
 /* tower 2 */
     menara(2.4,-1.6,0);
     kuncup(2.4,2.1,0);
@@ -619,16 +425,11 @@ glScaled(3, 3, 3);
     menara(3.8,-0.8,-10.5,1);
     kuncup(3.8,2.8,-10.5,1);
 
-   benteng();
-
-
 /*------------
  * END CASTLE
  -------------*/
 
  kampung();
-
- prajurit();
 
 
 	glutSwapBuffers();
@@ -704,7 +505,7 @@ void keyboard(unsigned char key, int x, int y) {
  *  End User Input
  */
 
-void reshape(int w1, int h1){
+void resize(int w1, int h1){
 	 glViewport(0,0,w1,h1);
 	 glMatrixMode(GL_PROJECTION);
 	 glLoadIdentity();
@@ -719,7 +520,6 @@ void timer(int value){
 }
 
 void init(void){
-
     glEnable(GL_DEPTH_TEST);
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
@@ -729,37 +529,28 @@ void init(void){
 	glDepthFunc(GL_LEQUAL);
 	glShadeModel(GL_SMOOTH);
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
-	glEnable(GL_TEXTURE_2D);
+	glEnable(GL_CULL_FACE);
 
     _terrain = loadTerrain("heightmap.bmp", 13);
     _terrainTanah = loadTerrain("heightmapTanah.bmp", 13);
     _terrainAir = loadTerrain("heightmapAir.bmp", 13);
-
-    texture[0] = loadtextures("water.bmp",256,256);
 }
 
 int main (int argc, char **argv){
 	 glutInit(&argc, argv);
-	 glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_STENCIL | GLUT_DEPTH); //add a stencil buffer to the window
+	 glutInitDisplayMode(GLUT_DOUBLE | GLUT_DEPTH | GLUT_RGBA);
 	 glutInitWindowPosition(100,100);
 	 glutInitWindowSize(w,h);
-	 glutCreateWindow("Winterfell");
+	 glutCreateWindow("Kings Landing");
 	 init();
 
 	 glutDisplayFunc(renderScene);
-	 glutReshapeFunc(reshape);
+	 glutReshapeFunc(resize);
 	 glutKeyboardFunc(keyboard);
 	 glutSpecialFunc(kibor);
 	 glutMouseFunc(kursor);
 	 glutMotionFunc(motion);
 	 glutTimerFunc(5,timer,0);
-
-    glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
-	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
-
-	glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
-	glMaterialfv(GL_FRONT, GL_SHININESS, high_shininess);
-	glColorMaterial(GL_FRONT, GL_DIFFUSE);
 
 
 	 glutMainLoop();

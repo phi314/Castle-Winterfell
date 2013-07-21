@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1338889972 source:d:\unleashed\my documents\workspace\opengl\castlevania\imageloader.cpp
+1338889972 source:d:\phi314\documents\codeblock\castlevania\imageloader.cpp
 	<assert.h>
 	<fstream>
 	"imageloader.h"
@@ -9,9 +9,19 @@
 
 1341010370 c:\program files\codeblocks\mingw\include\_mingw.h
 
-1338889972 d:\unleashed\my documents\workspace\opengl\castlevania\imageloader.h
+1338889972 d:\phi314\documents\codeblock\castlevania\imageloader.h
 
-1373621770 source:d:\unleashed\my documents\workspace\opengl\castlevania\main.cpp
+1338889972 source:d:\phi314\documents\codeblock\castlevania\vec3f.cpp
+	<math.h>
+	"vec3f.h"
+
+1341010374 c:\program files\codeblocks\mingw\include\math.h
+	<_mingw.h>
+
+1338889972 d:\phi314\documents\codeblock\castlevania\vec3f.h
+	<iostream>
+
+1374349786 source:d:\phi314\documents\codeblock\castlevania\main.cpp
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -23,18 +33,36 @@
 	<GL/gl.h>
 	"imageloader.h"
 	"vec3f.h"
+	"color.h"
 
-1301111164 c:\program files\codeblocks\mingw\include\gl\gl.h
-
-1301111164 c:\program files\codeblocks\mingw\include\gl\glu.h
+1341010376 c:\program files\codeblocks\mingw\include\stdio.h
+	<_mingw.h>
 	<stddef.h>
-	<GL/gl.h>
+	<stdarg.h>
+	<sys/types.h>
 
-983676786 c:\program files\codeblocks\mingw\include\gl\glut.h
+1341010380 c:\program files\codeblocks\mingw\include\sys\types.h
+	<_mingw.h>
+	<stddef.h>
+
+1341010376 c:\program files\codeblocks\mingw\include\stdlib.h
+	<_mingw.h>
+	<stddef.h>
+
+1341010376 c:\program files\codeblocks\mingw\include\string.h
+	<_mingw.h>
+	<stddef.h>
+
+1368254960 c:\program files\codeblocks\mingw\include\gl\glut.h
+	"freeglut_std.h"
+
+1368254960 c:\program files\codeblocks\mingw\include\gl\freeglut_std.h
 	<windows.h>
-	<stdlib.h>
+	<OpenGL/gl.h>
+	<OpenGL/glu.h>
 	<GL/gl.h>
 	<GL/glu.h>
+	<stdlib.h>
 
 1301111162 c:\program files\codeblocks\mingw\include\windows.h
 	<winresrc.h>
@@ -84,10 +112,6 @@
 	<poppack.h>
 
 1301111162 c:\program files\codeblocks\mingw\include\winerror.h
-
-1341010376 c:\program files\codeblocks\mingw\include\string.h
-	<_mingw.h>
-	<stddef.h>
 
 1301111148 c:\program files\codeblocks\mingw\include\basetsd.h
 
@@ -217,10 +241,6 @@
 	<objidl.h>
 	<cguid.h>
 
-1341010376 c:\program files\codeblocks\mingw\include\stdlib.h
-	<_mingw.h>
-	<stddef.h>
-
 1301111156 c:\program files\codeblocks\mingw\include\objidl.h
 	<objfwd.h>
 
@@ -238,23 +258,11 @@
 1301111156 c:\program files\codeblocks\mingw\include\oleidl.h
 	<objfwd.h>
 
-1341010376 c:\program files\codeblocks\mingw\include\stdio.h
-	<_mingw.h>
+1301111164 c:\program files\codeblocks\mingw\include\gl\gl.h
+
+1301111164 c:\program files\codeblocks\mingw\include\gl\glu.h
 	<stddef.h>
-	<stdarg.h>
-	<sys/types.h>
+	<GL/gl.h>
 
-1341010380 c:\program files\codeblocks\mingw\include\sys\types.h
-	<_mingw.h>
-	<stddef.h>
-
-1341010374 c:\program files\codeblocks\mingw\include\math.h
-	<_mingw.h>
-
-1338889972 d:\unleashed\my documents\workspace\opengl\castlevania\vec3f.h
-	<iostream>
-
-1338889972 source:d:\unleashed\my documents\workspace\opengl\castlevania\vec3f.cpp
-	<math.h>
-	"vec3f.h"
+1373727379 d:\phi314\documents\codeblock\castlevania\color.h
 
