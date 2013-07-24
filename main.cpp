@@ -29,8 +29,8 @@ static GLfloat spin = 0.0;
 float angle = 0;
 
 static int viewx = 0;
-static int viewy = 1;
-static int viewz = 60;
+static int viewy = 100;
+static int viewz = 500;
 
 /* animation */
 int x_tower = 1;
@@ -455,16 +455,17 @@ void gate()
 
 void square()
 {
-    glBegin(GL_POLYGON);
-        glColor3f(Black);
-        glVertex2f(0.2,0.8);
-        glColor3f(Black);
-        glVertex2f(-0.2,0.8);
-        glColor3f(Black);
-        glVertex2f(-0.2,0.2);
-        glColor3f(Black);
-        glVertex2f(0.2,0.2);
-    glEnd();
+    glPushMatrix();
+        glColor3f(0,0,0);
+            glBegin(GL_QUADS);
+            glVertex2f(0.2,0.8);
+            glVertex2f(-0.2,0.8);
+            glVertex2f(-0.2,0.2);
+            glVertex2f(0.2,0.2);
+            glEnd();
+        glColor3f(White);
+    glPopMatrix();
+
 }
 
 void wall(float x1,float y1,float z1,float x2,float y2,float z2, int t=0)
@@ -537,7 +538,7 @@ void cube(int t=0)
     glPushMatrix();
         glTranslated(0.0,0.0,0.0);
         glScaled(3,3,3);
-        wall(0.0,0,0,0.1,0.1,0.1);
+        wall(0.0,0,0,0.1,0.1,0.1,t);
 	glPopMatrix();
 }
 
@@ -826,7 +827,6 @@ void tower()
 
 void atap()
 {
-    glDisable(GL_TEXTURE_2D);
     glPushMatrix();
         glTranslated(0,0.0,0);
         glScaled(3,3,30);
@@ -880,6 +880,215 @@ void rumah_kiri()
     glPopMatrix();
 }
 
+
+void tower_castle()
+{
+    //-----TOWER--------
+// tower
+
+    //tower 1
+    glPushMatrix();
+        glTranslated(-8,-2,-9);
+        glScaled(1.2,1.2,1.2);
+        tower();
+    glPopMatrix();
+    //tower 2
+    glPushMatrix();
+        glTranslated(6,3,-9);
+        glScaled(1.7,1.7,1.7);
+        tower();
+    glPopMatrix();
+    //tower 3
+     glPushMatrix();
+        glTranslated(-5.5,4,-11);
+        glScaled(0.7,1,0.7);
+        tower();
+    glPopMatrix();
+    //tower 4
+     glPushMatrix();
+        glTranslated(-2,3,-18);
+        glScaled(2.5,2,2.5);
+        balcon_tower();
+    glPopMatrix();
+    //tower 5 tengah
+     glPushMatrix();
+        glTranslated(6,0,-18);
+        glScaled(1,1,1);
+        tower();
+    glPopMatrix();
+    //tower 5 tengah
+     glPushMatrix();
+        glTranslated(17,0,-18);
+        glScaled(2,2,2);
+        tower();
+    glPopMatrix();
+    //tower 5 belakang
+     glPushMatrix();
+        glTranslated(1,12,-28);
+        glScaled(2,2,2);
+        tower();
+    glPopMatrix();
+    //tower 5 belakang
+     glPushMatrix();
+        glTranslated(6,8,-28);
+        glScaled(1,1.7,1);
+        tower();
+    glPopMatrix();
+}
+
+/* tenda */
+
+
+void tiang_tenda(int t=7)
+{
+    for(int i=0;i<t;i++)
+    {
+        glPushMatrix();
+            glTranslated(0,0,i);
+            glScaled(4.0,20.0,4.0);
+            wall(0.0,0,0,0.1,0.1,0.1,1);
+        glPopMatrix();
+    }
+}
+
+void atap_tenda(int solid=1)
+{
+    glColor3f(White);
+    if(solid == 1)
+    {
+        glPushMatrix();
+
+            glTranslated(0,0,0);
+            glRotated(90,0,1,0);
+            glRotated(45,1,0,0);
+            glScaled(20.0,8.0,3.0);
+            square();
+        glPopMatrix();
+        glPushMatrix();
+            glTranslated(9,0,0);
+            glRotated(90,0,1,0);
+            glRotated(-45,1,0,0);
+            glScaled(20.0,8.0,3.0);
+            square();
+        glPopMatrix();
+    }
+    else
+    {
+    glPushMatrix();
+        glTranslated(-0.4,2,0);
+        glRotated(-45,0,0,1);
+        tiang_tenda();
+    glPopMatrix();
+    glPushMatrix();
+        glTranslated(2.6,1.8,0);
+        glRotated(45,0,0,1);
+        tiang_tenda();
+    glPopMatrix();
+    }
+
+
+
+}
+
+void tenda()
+{
+    //kiri
+    glPushMatrix();
+        glTranslated(0,0,0);
+        tiang_tenda();
+    glPopMatrix();
+
+    //kanan
+    glPushMatrix();
+        glTranslated(3,0,0);
+        tiang_tenda();
+    glPopMatrix();
+
+    glPushMatrix();
+        glColor3f(White);
+        glTranslated(-0.5,0.5,3.3);
+        glScaled(0.5,0.5,1);
+        atap_tenda();
+    glPopMatrix();
+
+}
+
+void pohon(int c=0)
+{
+    glPushMatrix();
+        if(c==0)
+            glColor3f(Green);
+        else
+            glColor3f(White);
+        glTranslated(0.0,0.0,0.0);
+        glRotated(90,-1.0,0.0,0.0);
+        gluCylinder(quad,0.5,0,4.5,50,50);
+    glPopMatrix();
+}
+
+void pepohonan()
+{
+        glPushMatrix();
+            glTranslated(70,0,9);
+            glScaled(2,2,2);
+            pohon();
+        glPopMatrix();
+        glPushMatrix();
+            glTranslated(75,2,1);
+            glScaled(2,2,2);
+            pohon();
+        glPopMatrix();
+        glPushMatrix();
+            glTranslated(60,0,5);
+            glScaled(2,2,2);
+            pohon();
+        glPopMatrix();
+         glPushMatrix();
+            glTranslated(70,0,2);
+            glScaled(2,2,2);
+            pohon();
+        glPopMatrix();
+}
+
+void tower_turret()
+{
+    //tower1
+    glPushMatrix();
+        glTranslated(0,0,0);
+        glScaled(3,4,3);
+        cube();
+    glPopMatrix();
+    glPushMatrix();
+        glTranslated(0,1.2,0);
+        glScaled(0.1,0.2,0.1);
+        atap();
+    glPopMatrix();
+    glPushMatrix();
+        glTranslated(0,1.2,0.5);
+        glScaled(0.1,0.1,0.1);
+        atap_tenda();
+    glPopMatrix();
+     glPushMatrix();
+        glTranslated(0.4,0.8,1.1);
+        glScaled(0.2,0.3,0.1);
+        square();
+    glPopMatrix();
+
+}
+
+void pasukan()
+{
+    for(int i=0; i<10; i++)
+    {
+        glPushMatrix();
+            glColor3f(White);
+            glTranslated(-6,0.0,i);
+            glScaled(4,9,2);
+            cube();
+        glPopMatrix();
+    }
+}
+
 void castle()
 {
      glPushMatrix();
@@ -917,9 +1126,9 @@ void castle()
         cube();
     glPopMatrix();
      glPushMatrix();
-        glTranslated(8,8.0,-28);
-        glScaled(25,40,30);
-        cube();
+        glTranslated(8,6.0,-28);
+        glScaled(8,8,8);
+        tower_turret();
     glPopMatrix();
     //kiri belakang
     glPushMatrix();
@@ -981,169 +1190,101 @@ void castle()
         glPopMatrix();
 
         //pintu kanan
-        glPushMatrix();
-            glTranslated(10.5,-0.8,-18.9);
-            glScaled(6,4,1);
-            square();
-        glPopMatrix();
-
-}
-
-void tower_castle()
-{
-    //-----TOWER--------
-// tower
-
-    //tower 1
-    glPushMatrix();
-        glTranslated(-8,-2,-9);
-        glScaled(1.2,1.2,1.2);
-        tower();
-    glPopMatrix();
-    //tower 2
-    glPushMatrix();
-        glTranslated(6,3,-9);
-        glScaled(1.7,1.7,1.7);
-        tower();
-    glPopMatrix();
-    //tower 3
-     glPushMatrix();
-        glTranslated(-5.5,4,-11);
-        glScaled(0.7,1,0.7);
-        tower();
-    glPopMatrix();
-    //tower 4
-     glPushMatrix();
-        glTranslated(-2,-0.8,-18);
-        glScaled(2.5,2,2.5);
-        balcon_tower();
-    glPopMatrix();
-    //tower 5 tengah
-     glPushMatrix();
-        glTranslated(6,0,-18);
-        glScaled(1,1,1);
-        tower();
-    glPopMatrix();
-    //tower 5 tengah
-     glPushMatrix();
-        glTranslated(17,0,-18);
-        glScaled(2,2,2);
-        tower();
-    glPopMatrix();
-    //tower 5 belakang
-     glPushMatrix();
-        glTranslated(1,12,-28);
-        glScaled(2,2,2);
-        tower();
-    glPopMatrix();
-    //tower 5 belakang
-     glPushMatrix();
-        glTranslated(6,8,-28);
-        glScaled(1,1.7,1);
-        tower();
-    glPopMatrix();
-}
-
-/* tenda */
-
-
-void tiang_tenda(int t=7)
-{
-    for(int i=0;i<t;i++)
-    {
-        glPushMatrix();
-            glTranslated(0,0,i);
-            glScaled(4.0,20.0,4.0);
+         glPushMatrix();
+            glTranslated(11.3,0,-18.9);
+            glScaled(10,15,1);
             wall(0.0,0,0,0.1,0.1,0.1,1);
         glPopMatrix();
-    }
-}
 
-void atap_tenda(int solid=1)
-{
-    if(solid == 1)
-    {
-        glPushMatrix();
-            glColor3f(Brown);
-            glTranslated(0,0,0);
-            glRotated(90,0,1,0);
-            glRotated(45,1,0,0);
-            glScaled(20.0,8.0,3.0);
-            square();
+         glPushMatrix();
+            glTranslated(12,0,3.9);
+            glScaled(30,20,1);
+            wall(0.0,0,0,0.1,0.1,0.1,1);
         glPopMatrix();
-        glPushMatrix();
-            glColor3f(Brown);
-            glTranslated(9,0,0);
-            glRotated(90,0,1,0);
-            glRotated(-45,1,0,0);
-            glScaled(20.0,8.0,3.0);
-            square();
-        glPopMatrix();
-    }
-    else
-    {
-    glPushMatrix();
-        glTranslated(-0.4,2,0);
-        glRotated(-45,0,0,1);
-        tiang_tenda();
-    glPopMatrix();
-    glPushMatrix();
-        glTranslated(2.6,1.8,0);
-        glRotated(45,0,0,1);
-        tiang_tenda();
-    glPopMatrix();
-    }
-
 
 }
 
-void tenda()
+
+void benteng()
 {
-    //kiri
+    //lurus
     glPushMatrix();
         glTranslated(0,0,0);
-        tiang_tenda();
+        glScaled(15,3,1);
+        cube();
     glPopMatrix();
-
+    glPushMatrix();
+        glTranslated(4.5,0,0);
+        glScaled(15,3,1);
+        cube();
+    glPopMatrix();
     //kanan
     glPushMatrix();
-        glTranslated(3,0,0);
-        tiang_tenda();
+        glTranslated(8.8,0,0);
+        glRotated(70,0,1,0);
+        glScaled(10,3,1);
+        cube();
     glPopMatrix();
-
     glPushMatrix();
-        glTranslated(-0.5,0.5,3.3);
-        glScaled(0.5,0.5,1);
-        atap_tenda();
+        glTranslated(9.9,0,-2.8);
+        glRotated(90,0,1,0);
+        glScaled(20,3,1);
+        cube();
     glPopMatrix();
-
-}
-
-void pohon(int c=0)
-{
     glPushMatrix();
-        if(c==0)
-            glColor3f(Green);
-        else
-            glColor3f(White);
-        glTranslated(0.0,0.0,0.0);
-        glRotated(90,-1.0,0.0,0.0);
-        gluCylinder(quad,0.5,0,4.5,50,50);
+        glTranslated(9.9,0,-9);
+        glRotated(100,0,1,0);
+        glScaled(8,3,1);
+        cube();
     glPopMatrix();
-}
+    glPushMatrix();
+        glTranslated(9.6,0,-11.4);
+        glRotated(120,0,1,0);
+        glScaled(15,3,1);
+        cube();
+    glPopMatrix();
+    //lurus
+    glPushMatrix();
+        glTranslated(1.5,0,-15);
+        glScaled(20,3,1);
+        cube();
+    glPopMatrix();
+    //kiri
+    glPushMatrix();
+        glTranslated(-1,0,-3);
+        glRotated(-70,0,1,0);
+        glScaled(10,3,1);
+        cube();
+    glPopMatrix();
+    glPushMatrix();
+        glTranslated(-1.2,0,-3);
+        glRotated(90,0,1,0);
+        glScaled(20,3,1);
+        cube();
+    glPopMatrix();
+    glPushMatrix();
+        glTranslated(-0.6,0,-11.6);
+        glRotated(-100,0,1,0);
+        glScaled(8,3,1);
+        cube();
+    glPopMatrix();
+    glPushMatrix();
+        glTranslated(1.6,0,-14.9);
+        glRotated(-120,0,1,0);
+        glScaled(15,3,1);
+        cube();
+    glPopMatrix();
 
-void pepohonan()
-{
-    for(int i=0; i<30; i++)
-    {
-        glPushMatrix();
-            i = i+2;
-            glTranslated(70,0,i);
-            glScaled(2,2,2);
-            pohon();
-        glPopMatrix();
-    }
-
+    //tower1
+    glPushMatrix();
+        glTranslated(4,0,-0.2);
+        tower_turret();
+    glPopMatrix();
+     //tower2
+    glPushMatrix();
+        glTranslated(6,0,-0.2);
+        tower_turret();
+    glPopMatrix();
 }
 
 
@@ -1190,61 +1331,114 @@ void renderScene(void){
 /*------------
  * END TERRAIN
  -------------*/
-/*------------
- * THE CASTLE
- -------------*/
-glPushMatrix();
-    glScaled(3,3,3);
-    castle();
-    tower_castle();
-
-glPopMatrix();
-
-glPushMatrix();
-    glScaled(8,8,8);
-    glTranslated(-8,0,-12);
-    rumah_kiri();
-glPopMatrix();
-/*------------
- * END CASTLE
- -------------*/
-
+ glPushMatrix();
+     glScaled(3,3,3);
+    glTranslated(0,0,50);
 
 /*------------
  * THE VILLAGE
  -------------*/
-glPushMatrix();
-    glTranslated(50,0,-35);
-    glScaled(2,2,2);
-    tenda();
-glPopMatrix();
-glPushMatrix();
-    glTranslated(50,0,-13);
-    glScaled(3,2,1);
-    tenda();
-glPopMatrix();
-glPushMatrix();
-    glTranslated(23,0,-38);
-    glScaled(1.5,1.8,1.8);
-    glRotated(90,0,1,0);
-    tenda();
-glPopMatrix();
+ //kanan
+    glPushMatrix();
+        glTranslated(50,0,-35);
+        glScaled(2,2,2);
+        tenda();
+    glPopMatrix();
+     glPushMatrix();
+        glTranslated(80,0,-20);
+        glScaled(2,2,2);
+        tenda();
+    glPopMatrix();
+    glPushMatrix();
+        glTranslated(50,0,-13);
+        glScaled(2,2,2);
+        tenda();
+    glPopMatrix();
+    glPushMatrix();
+        glTranslated(23,0,-38);
+        glScaled(1.5,1.8,1.8);
+        glRotated(90,0,1,0);
+        tenda();
+    glPopMatrix();
+    //kiri
+    glPushMatrix();
+        glTranslated(-35,0,-5);
+        glScaled(2,2,2);
+        tenda();
+    glPopMatrix();
+    glPushMatrix();
+        glTranslated(-20,0,-5);
+        glScaled(2,2,2);
+        tenda();
+    glPopMatrix();
+    glPushMatrix();
+        glTranslated(-5,0,-5);
+        glScaled(2,2,2);
+        tenda();
+    glPopMatrix();
 /*------------
  * END VILLAGE
  -------------*/
 
 /*------------
+ * THE CASTLE
+ -------------*/
+
+    glPushMatrix();
+        glScaled(3,3,3);
+        castle();
+    glPopMatrix();
+    glPushMatrix();
+        glTranslated(-35,0,8);
+        glScaled(14,14,9);
+        benteng();
+    glPopMatrix();
+    glPushMatrix();
+        glScaled(4,4,4);
+        glTranslated(-13,0,-12);
+        rumah_kiri();
+    glPopMatrix();
+    glPushMatrix();
+        glScaled(3,3,3);
+        tower_castle();
+    glPopMatrix();
+
+/*------------
+ * END CASTLE
+ -------------*/
+
+/*------------
  * THE SCENE
  -------------*/
-glPushMatrix();
-    glTranslated(0,0,-60);
-    pepohonan();
-glPopMatrix();
-glPushMatrix();
-    glTranslated(5,0,-60);
-    pepohonan();
-glPopMatrix();
+    glPushMatrix();
+        glTranslated(0,0,-60);
+        pepohonan();
+    glPopMatrix();
+    glPushMatrix();
+        glTranslated(5,0,-60);
+        pepohonan();
+    glPopMatrix();
+    glPushMatrix();
+        glTranslated(4,0,-20);
+        pepohonan();
+    glPopMatrix();
+/*------------
+ * END SCENE
+ -------------*/
 
+ /*------------
+ * THE ARMY
+ -------------*/
+ glPushMatrix();
+        glTranslated(0,0,10);
+        //pasukan();
+    glPopMatrix();
+ /*------------
+ * END ARMY
+ -------------*/
+
+
+glPopMatrix();
 
 	glutSwapBuffers();
 	glFlush();
@@ -1349,9 +1543,9 @@ void init(void){
 
 
 
-    _terrain = loadTerrain("heightmap.bmp", 12);
-    _terrainTanah = loadTerrain("heightmapTanah.bmp", 12);
-    _terrainAir = loadTerrain("heightmapAir.bmp", 12);
+    _terrain = loadTerrain("heightmap.bmp", 20);
+    _terrainTanah = loadTerrain("heightmapTanah.bmp", 20);
+    _terrainAir = loadTerrain("heightmapAir.bmp", 20);
     _terrainJalan = loadTerrain("heightmapJalan.bmp", 12);
 
 
