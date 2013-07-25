@@ -11,9 +11,9 @@ REPOSITORY :  Tugas Besar Kelompok 11
 
 ANGGOTA :
 
-10109333 – Arief Wibowo     > phi314
-10109320 – Galih Pratama J  > xpsychosocialx
-10109342 – Ervand Rayina    > ervand
+10109333 – Arief Wibowo     > phi314,
+10109320 – Galih Pratama J  > xpsychosocialx,
+10109342 – Ervand Rayina    > ervand,
 10109348 – Guruh Sarwono    > dimasguruh
 
 ABSTRAK :
