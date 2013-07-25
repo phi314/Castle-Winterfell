@@ -41,7 +41,7 @@ float j=0;
 GLUquadricObj *quad = gluNewQuadric();
 
 //texture
-GLuint texture[40];
+GLuint texture[6];
 
 
 typedef struct ImageTexture ImageTexture; //struktur data untuk
@@ -453,10 +453,14 @@ void gate()
     glPopMatrix();
 }
 
-void square()
+void square(int c=0)
 {
     glPushMatrix();
-        glColor3f(0,0,0);
+        if(c == 1)
+            glColor3f(White);
+        else
+            glColor3f(Black);
+
             glBegin(GL_QUADS);
             glVertex2f(0.2,0.8);
             glVertex2f(-0.2,0.8);
@@ -951,43 +955,25 @@ void tiang_tenda(int t=7)
     }
 }
 
-void atap_tenda(int solid=1)
+void atap_tenda()
 {
-    glColor3f(White);
-    if(solid == 1)
-    {
+    glPushMatrix();
+        glColor3f(White);
         glPushMatrix();
-
             glTranslated(0,0,0);
             glRotated(90,0,1,0);
             glRotated(45,1,0,0);
             glScaled(20.0,8.0,3.0);
-            square();
+            square(1);
         glPopMatrix();
         glPushMatrix();
             glTranslated(9,0,0);
             glRotated(90,0,1,0);
             glRotated(-45,1,0,0);
             glScaled(20.0,8.0,3.0);
-            square();
+            square(1);
         glPopMatrix();
-    }
-    else
-    {
-    glPushMatrix();
-        glTranslated(-0.4,2,0);
-        glRotated(-45,0,0,1);
-        tiang_tenda();
     glPopMatrix();
-    glPushMatrix();
-        glTranslated(2.6,1.8,0);
-        glRotated(45,0,0,1);
-        tiang_tenda();
-    glPopMatrix();
-    }
-
-
-
 }
 
 void tenda()
@@ -1559,19 +1545,16 @@ void init(void){
 
 
     /* texture bata hitam */
-
 	glBindTexture(GL_TEXTURE_2D, texture[0]);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexImage2D(GL_TEXTURE_2D, 0, 3, image1->sizeX, image1->sizeY, 0, GL_RGB,GL_UNSIGNED_BYTE, image1->data);
 
     /* texture kayu */
-
 	glBindTexture(GL_TEXTURE_2D, texture[1]);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexImage2D(GL_TEXTURE_2D, 0, 3, image2->sizeX, image2->sizeY, 0, GL_RGB,GL_UNSIGNED_BYTE, image2->data);
-
 }
 
 int main (int argc, char **argv){
